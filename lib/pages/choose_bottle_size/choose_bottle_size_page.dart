@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_code/simple_code.dart';
 import 'package:yeslist_project/controllers/fill_gallon_controller.dart';
 import 'package:yeslist_project/models/result_model.dart';
 
@@ -12,11 +13,15 @@ class ChooseBottleSize extends StatefulWidget {
 class _ChooseBottleSizeState extends State<ChooseBottleSize> {
   final _formKey = GlobalKey<FormState>();
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Consumer<FillGalonController>(
         builder: (context, provider, widget) {
-          provider.getValorDasGarrafas();
           return ListView.builder(
             itemCount: int.parse(provider.quantidadeDeGarrafasController.text),
             itemBuilder: (_, index) {
@@ -114,10 +119,47 @@ class _ChooseBottleSizeState extends State<ChooseBottleSize> {
                     builder: (context, provider, widget) {
                   Result result = provider.calculateAlgorithm();
                   return SimpleDialog(
-                    title: Text('O Resultado desse calculo é!'),
+                    title: Text('O Resultado desse calculo é:'),
                     children: [
-                      Text('Garrafas: ${result.garrafasUtilizadas}'),
-                      Text('Sobrou: ${result.sobrou.toStringAsFixed(1)}'),
+                      SizedBox(
+                        height: hsz(20.0),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          'Garrafas: ${result.garrafasUtilizadas}',
+                          style: TextStyle(
+                              fontSize: sz(16), fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(
+                        height: hsz(20.0),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          'Sobrou: ${result.sobrou.toStringAsFixed(1)}',
+                          style: TextStyle(
+                              fontSize: sz(16), fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(
+                        height: hsz(20.0),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          context.read<FillGalonController>().clear();
+                          Navigator.pushReplacementNamed(context, '/home');
+                          this.dispose();
+                        },
+                        child: Text(
+                          'Tentar Novamente',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
                     ],
                   );
                 });

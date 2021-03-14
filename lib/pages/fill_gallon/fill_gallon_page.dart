@@ -42,6 +42,7 @@ class _FillGalonPageState extends State<FillGalonPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (_formKey.currentState.validate()) {
+            context.read<FillGalonController>().getValorDasGarrafas();
             Navigator.pushNamed(context, '/choosebottlesize');
           }
         },
